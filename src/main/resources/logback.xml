@@ -1,0 +1,41 @@
+<configuration>
+
+	<appender name="Stdout" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<pattern>%d{yyyy-MM-dd HH:mm:ss} %-5p %c{1}:%L %mdc - %m%n</pattern>
+		</encoder>
+	</appender>
+	
+  	<appender name="SiftingRolling" class="ch.qos.logback.classic.sift.SiftingAppender">
+		<discriminator>
+			<key>tenantId</key>
+			<defaultValue>Common</defaultValue>
+		</discriminator>
+		<sift>
+
+			<appender name="FILE-${tenantId}"
+				class="ch.qos.logback.core.rolling.RollingFileAppender">
+				<file>${jboss.server.log.dir}/${tenantId}/ecmService.log</file>
+				<layout class="ch.qos.logback.classic.PatternLayout">
+					<pattern>%d{yyyy-MM-dd HH:mm:ss} %-5p %c{1}:%L %mdc - %m%n
+					</pattern>
+				</layout>
+				<rollingPolicy
+					class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+					<fileNamePattern>${jboss.server.log.dir}/${tenantId}/ecmService.log.%i
+					</fileNamePattern>
+					<maxIndex>5</maxIndex>
+				</rollingPolicy>
+				<triggeringPolicy
+					class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+					<maxFileSize>5MB</maxFileSize>
+				</triggeringPolicy>
+				<append>false</append>
+			</appender>
+		</sift>
+	</appender>
+
+  <root level="debug">
+    <appender-ref ref="Stdout" />
+  </root>
+</configuration>
