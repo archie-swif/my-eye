@@ -2,7 +2,9 @@ package com.ryabokon.myeye;
 
 import org.junit.*;
 
-public class MedianFilterTest
+import com.ryabokon.myeye.image.*;
+
+public class BoxBlurTest
 {
 
     @Test
@@ -22,7 +24,7 @@ public class MedianFilterTest
 	matrix[2][1] = 4;
 	matrix[2][2] = 4;
 
-	int avarage = FastMedianFilter.getCellAvarage(matrix, 1, 1);
+	int avarage = BoxFilter.getCellAvarage(matrix, 1, 1);
 	Assert.assertTrue(avarage == 2);
 
     }
@@ -44,7 +46,7 @@ public class MedianFilterTest
 	array[2] = 3;
 	array[3] = 4;
 
-	int[][] actual = FastMedianFilter.arrayToMatrix(array, 2, 2);
+	int[][] actual = BoxFilter.arrayToMatrix(array, 2, 2);
 
 	for (int y = 0; y < 2; y++)
 	{
@@ -72,7 +74,7 @@ public class MedianFilterTest
 	array[7] = 7;
 	array[8] = 7;
 
-	int[] result = FastMedianFilter.filter(array, 3, 3);
+	int[] result = BoxFilter.filter(array, 3, 3);
 
     }
 }

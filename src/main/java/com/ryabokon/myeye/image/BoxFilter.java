@@ -1,6 +1,6 @@
-package com.ryabokon.myeye;
+package com.ryabokon.myeye.image;
 
-public class FastMedianFilter {
+public class BoxFilter {
 
 	public static int[] filter(int[] image, final int width, final int height) {
 

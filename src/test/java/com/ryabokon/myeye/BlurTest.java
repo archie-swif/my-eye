@@ -1,12 +1,11 @@
 package com.ryabokon.myeye;
 
 import java.awt.image.*;
-import java.io.*;
 import java.net.*;
 
 import javax.imageio.*;
-
 import org.junit.*;
+import com.ryabokon.myeye.image.*;
 
 public class BlurTest
 {

@@ -8,6 +8,8 @@ import javax.imageio.*;
 
 import org.junit.*;
 
+import com.ryabokon.myeye.image.*;
+
 public class ImageToolsTest
 {
 
@@ -107,7 +109,7 @@ public class ImageToolsTest
 
 	// for (int i = 0; i < 1000; i++)
 	{
-	    int[] result = FastMedianFilter.filter(img, width, height);
+	    int[] result = BoxFilter.filter(img, width, height);
 	    // BufferedImage blurd =
 	    // ImageTools.writeImageArrayToBufferedImage(height, width, img);
 	    // ImageIO.write(blurd, "JPG", new File("blurd_4.jpg"));

@@ -1,4 +1,4 @@
-package com.ryabokon.myeye;
+package com.ryabokon.myeye.image;
 
 import java.awt.*;
 import java.awt.geom.*;
@@ -64,7 +64,7 @@ public class ImageTools {
 		final int width = imageA.getWidth();
 
 		int[] diffArray = ImageTools.getImageDifferenceAsArray(imageA, imageB);
-		FastMedianFilter.filter(diffArray, height, width);
+		BoxFilter.filter(diffArray, height, width);
 		return ImageTools.getDifferenceAmount(diffArray, binarizationThreshold);
 	}
 

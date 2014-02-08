@@ -2,20 +2,19 @@ package com.ryabokon.myeye;
 
 import java.net.*;
 
-public class Launch
-{
+import com.ryabokon.myeye.capture.*;
 
-    public static void main(String[] args) throws Throwable
-    {
-	URL camera = new URL("http", "192.168.2.107", 80, "/image.jpg");
-	String path = "d:/images/";
-	if (args.length != 0 && args[0] != null)
-	{
-	    path = args[0];
+public class Launch {
+
+	public static void main(String[] args) throws Throwable {
+		URL camera = new URL("http", "192.168.2.107", 80, "/image.jpg");
+		String path = "d:/images/";
+
+		AbstractImagePtovider shot = new SingleImageProvider(path, camera);
+		// ImageProvider file = new FileSystemImageProvider(path, camera);
+		//ImageProvider queue = new QueueImageProvider(path, camera);
+
+		DifferenceFinder eye = new DifferenceFinder(shot);
+		eye.startCapture();
 	}
-	DifferenceFinder df = new DifferenceFinder(camera, path);
-
-	// DifferenceFinder df = new DifferenceFinder(path);
-
-    }
 }
