@@ -10,9 +10,12 @@ public class Launch {
 		URL camera = new URL("http", "192.168.2.107", 80, "/image.jpg");
 		String path = "d:/images/";
 
-		AbstractImagePtovider shot = new SingleImageProvider(path, camera);
-		// ImageProvider file = new FileSystemImageProvider(path, camera);
-		//ImageProvider queue = new QueueImageProvider(path, camera);
+		AbstractImageProvider shot = new SingleImageProvider(path, camera);
+		// AbstractImageProvider file = new FileSystemImageProvider(path,
+		// camera);
+		// AbstractImageProvider queue = new QueuedImageProvider(path, camera);
+		// AbstractImageProvider pie = new PieImageProvider(path,
+		// "cmd.exe /C type src\\test\\resources\\1.jpg");
 
 		DifferenceFinder eye = new DifferenceFinder(shot);
 		eye.startCapture();

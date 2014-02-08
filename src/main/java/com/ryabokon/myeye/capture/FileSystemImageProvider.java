@@ -13,7 +13,7 @@ import org.slf4j.*;
 
 import com.ryabokon.myeye.*;
 
-public class FileSystemImageProvider extends AbstractImagePtovider {
+public class FileSystemImageProvider extends AbstractImageProvider {
 
 	private static final Logger log = LoggerFactory.getLogger(FileSystemImageProvider.class);
 

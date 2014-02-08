@@ -11,12 +11,12 @@ import com.ryabokon.myeye.image.*;
 public class DifferenceFinder {
 	private static final Logger log = LoggerFactory.getLogger(DifferenceFinder.class);
 
-	private final AbstractImagePtovider imageProvider;
+	private final AbstractImageProvider imageProvider;
 
 	private BufferedImage previousImage;
 	private BufferedImage currentImage;
 
-	public DifferenceFinder(AbstractImagePtovider imageProvider) throws Throwable {
+	public DifferenceFinder(AbstractImageProvider imageProvider) throws Throwable {
 		this.imageProvider = imageProvider;
 	}
 

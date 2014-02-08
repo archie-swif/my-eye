@@ -9,7 +9,7 @@ import javax.imageio.*;
 
 import com.ryabokon.myeye.*;
 
-public class QueuedImageProvider extends AbstractImagePtovider {
+public class QueuedImageProvider extends AbstractImageProvider {
 
 	private final URL camera;
 	private final List<BufferedImage> list = Collections.synchronizedList(new LinkedList<BufferedImage>());

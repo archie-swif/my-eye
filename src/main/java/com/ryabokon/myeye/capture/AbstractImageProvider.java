@@ -7,14 +7,14 @@ import java.util.*;
 
 import javax.imageio.*;
 
-public abstract class AbstractImagePtovider {
+public abstract class AbstractImageProvider {
 
 	protected final SimpleDateFormat fileDateFormatter = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss-SSSS");
 	protected final SimpleDateFormat folderDateFormatter = new SimpleDateFormat("yyyy.MM.dd");
 
 	protected final String pathToImagesFolder;
 
-	public AbstractImagePtovider(String pathToImagesFolder) {
+	public AbstractImageProvider(String pathToImagesFolder) {
 		this.pathToImagesFolder = pathToImagesFolder;
 	}
 

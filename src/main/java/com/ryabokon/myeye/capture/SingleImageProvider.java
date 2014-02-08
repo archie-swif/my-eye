@@ -8,7 +8,7 @@ import javax.imageio.*;
 
 import com.ryabokon.myeye.*;
 
-public class SingleImageProvider extends AbstractImagePtovider {
+public class SingleImageProvider extends AbstractImageProvider {
 
 	private final URL camera;
 
