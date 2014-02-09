@@ -10,7 +10,7 @@ public class Launch {
 		URL camera = new URL("http", "192.168.2.107", 80, "/image.jpg");
 		String path = "d:/images/";
 
-		String command = "raspistill -t 200 -cfx 128:128 -h 1024 -w 1280 -o -";
+		String command = "raspistill -t 10 -n -cfx 128:128 -q 50  -h 1024 -w 1280";
 		if (args.length != 0 && args[0] != null) {
 			command = args[0];
 		}
@@ -20,6 +20,8 @@ public class Launch {
 		// camera);
 		// AbstractImageProvider queue = new QueuedImageProvider(path, camera);
 		// AbstractImageProvider pie = new PieImageProvider(path,
+		// command);
+		// AbstractImageProvider pieFile = new PieFileSystemImageProvider(path,
 		// command);
 
 		DifferenceFinder eye = new DifferenceFinder(shot);

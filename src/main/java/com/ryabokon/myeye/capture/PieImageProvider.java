@@ -22,7 +22,7 @@ public class PieImageProvider extends AbstractImageProvider {
 	@Override
 	public BufferedImage getImage() throws Throwable {
 		long startTime = System.nanoTime();
-		Process proc = Runtime.getRuntime().exec(command);
+		Process proc = Runtime.getRuntime().exec(command + " -o -");
 		InputStream stream = proc.getInputStream();
 		BufferedImage image = ImageIO.read(stream);
 
