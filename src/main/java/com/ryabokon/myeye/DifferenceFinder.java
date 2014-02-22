@@ -43,12 +43,11 @@ public class DifferenceFinder {
 					long endTime = System.nanoTime();
 					Statistics.addDetectorTime(endTime - startTime, String.valueOf(diffAmmount));
 				}
-				Statistics.printStatistics();
+
 			}
 
 			else {
-				log.info("Twix!");
-
+				Statistics.printStatistics();
 			}
 
 		}
@@ -56,7 +55,7 @@ public class DifferenceFinder {
 	}
 
 	private BufferedImage prepareImage(BufferedImage image) {
-		image = ImageTools.scalingResize(image, 160, 128);
+		image = ImageTools.scalingResize(image, 320, 256);
 		image = ImageTools.blur(image);
 		return image;
 	}

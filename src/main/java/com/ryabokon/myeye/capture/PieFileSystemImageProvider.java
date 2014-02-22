@@ -3,7 +3,6 @@ package com.ryabokon.myeye.capture;
 import java.awt.image.*;
 import java.io.*;
 import java.nio.file.*;
-import java.util.*;
 
 import javax.imageio.*;
 
@@ -20,8 +19,6 @@ public class PieFileSystemImageProvider extends AbstractImageProvider {
 	private File[] listOfFiles;
 	private int currentFileId = 0;
 
-	private Thread fillerThread;
-
 	public PieFileSystemImageProvider(String pathToImagesFolder, String command) throws Throwable {
 		super(pathToImagesFolder);
 		this.command = command;
@@ -29,12 +26,6 @@ public class PieFileSystemImageProvider extends AbstractImageProvider {
 
 	@Override
 	public BufferedImage getImage() throws Throwable {
-
-		if (fillerThread == null) {
-			PiFileSystemFiller filler = new PiFileSystemFiller();
-			fillerThread = new Thread(filler);
-			fillerThread.start();
-		}
 
 		long startTime = System.nanoTime();
 		if (listOfFiles == null || listOfFiles.length < 2 || currentFileId == listOfFiles.length) {
@@ -69,38 +60,4 @@ public class PieFileSystemImageProvider extends AbstractImageProvider {
 		return listOfFiles;
 	}
 
-	private class PiFileSystemFiller implements Runnable {
-
-		@Override
-		public void run() {
-			while (true) {
-				long startTime = System.nanoTime();
-				String filename = " -c " + pathToImagesFolder + fileDateFormatter.format(new Date()) + ".jpg";
-
-				Process proc;
-				try {
-					proc = Runtime.getRuntime().exec(command + filename);
-
-					// Read errors if any appear
-					StringBuilder error = new StringBuilder();
-					BufferedReader stdError = new BufferedReader(new InputStreamReader(proc.getErrorStream()));
-					String s = "";
-					while ((s = stdError.readLine()) != null) {
-						error.append(s);
-					}
-
-					log.error(error.toString());
-
-					proc.waitFor();
-				} catch (Throwable t) {
-
-					log.error(t.getMessage());
-				}
-
-				long endTime = System.nanoTime();
-				Statistics.addProviderTime(endTime - startTime);
-			}
-
-		}
-	}
 }

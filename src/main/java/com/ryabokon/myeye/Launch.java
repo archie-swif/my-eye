@@ -15,16 +15,16 @@ public class Launch {
 			command = args[0];
 		}
 
-		AbstractImageProvider shot = new SingleImageProvider(path, camera);
+		// AbstractImageProvider shot = new SingleImageProvider(path, camera);
 		// AbstractImageProvider file = new FileSystemImageProvider(path,
 		// camera);
-		// AbstractImageProvider queue = new QueuedImageProvider(path, camera);
+		AbstractImageProvider queue = new QueuedImageProvider(path, camera);
 		// AbstractImageProvider pie = new PieImageProvider(path,
 		// command);
 		// AbstractImageProvider pieFile = new PieFileSystemImageProvider(path,
 		// command);
 
-		DifferenceFinder eye = new DifferenceFinder(shot);
+		DifferenceFinder eye = new DifferenceFinder(queue);
 		eye.startCapture();
 	}
 }
