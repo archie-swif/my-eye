@@ -5,27 +5,26 @@
 			<pattern>%d{HH:mm:ss} %-5p %c{1}:%L %mdc - %m%n</pattern>
 		</encoder>
 	</appender>
-	
-  	<appender name="ROLLING"
-				class="ch.qos.logback.core.rolling.RollingFileAppender">
-				<file>logs/myeye.log</file>
-				<layout class="ch.qos.logback.classic.PatternLayout">
-					<pattern>%d{HH:mm:ss} %-5p %c{1}:%L %mdc - %m%n
-					</pattern>
-				</layout>
-				<rollingPolicy
-					class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
-					<fileNamePattern>logs/myeye.log.%i</fileNamePattern>
-					<maxIndex>5</maxIndex>
-				</rollingPolicy>
-				<triggeringPolicy
-					class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
-					<maxFileSize>5MB</maxFileSize>
-				</triggeringPolicy>
-				<append>false</append>
-			</appender>
 
-  <root level="debug">
-    <appender-ref ref="ROLLING" />
-  </root>
+	<appender name="ROLLING"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>logs/myeye.log</file>
+		<layout class="ch.qos.logback.classic.PatternLayout">
+			<pattern>%d{HH:mm:ss} %-5p %c{1}:%L %mdc - %m%n
+			</pattern>
+		</layout>
+		<rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+			<fileNamePattern>logs/myeye.log.%i</fileNamePattern>
+			<maxIndex>5</maxIndex>
+		</rollingPolicy>
+		<triggeringPolicy
+			class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+			<maxFileSize>5MB</maxFileSize>
+		</triggeringPolicy>
+		<append>false</append>
+	</appender>
+
+	<root level="debug">
+		<appender-ref ref="ROLLING" />
+	</root>
 </configuration>

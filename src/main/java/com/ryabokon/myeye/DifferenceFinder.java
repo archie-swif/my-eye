@@ -23,7 +23,7 @@ public class DifferenceFinder {
 	public void startCapture() throws IOException, Throwable {
 		while (true) {
 
-			BufferedImage image = imageProvider.getImage();
+			BufferedImage image = imageProvider.provideImage();
 
 			if (image != null) {
 				long startTime = System.nanoTime();

@@ -8,24 +8,27 @@ import java.util.*;
 
 import javax.imageio.*;
 
+import org.slf4j.*;
+
 public abstract class AbstractImageProvider {
 
+	private static final Logger log = LoggerFactory.getLogger(AbstractImageProvider.class);
 	protected final SimpleDateFormat fileDateFormatter = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss-SSSS");
 	protected final SimpleDateFormat folderDateFormatter = new SimpleDateFormat("yyyy.MM.dd");
 
-	protected final String pathToImagesFolder;
+	private final String pathToStoreImages;
 
-	public AbstractImageProvider(String pathToImagesFolder) {
-		this.pathToImagesFolder = pathToImagesFolder;
+	public AbstractImageProvider(String pathToStoreImages) {
+		this.pathToStoreImages = pathToStoreImages;
 	}
 
-	public abstract BufferedImage getImage() throws Throwable;
+	public abstract BufferedImage provideImage() throws Throwable;
 
 	public void saveImage(BufferedImage image) throws Throwable {
 
 		Date date = new Date();
 
-		String dateFolder = pathToImagesFolder + "/diff/" + folderDateFormatter.format(date) + "/";
+		String dateFolder = pathToStoreImages + folderDateFormatter.format(date) + "/";
 		File dateFolderFile = new File(dateFolder);
 		if (!dateFolderFile.exists()) {
 			dateFolderFile.mkdirs();

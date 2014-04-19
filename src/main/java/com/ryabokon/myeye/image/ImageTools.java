@@ -4,8 +4,14 @@ import java.awt.*;
 import java.awt.geom.*;
 import java.awt.image.*;
 import java.io.*;
+import java.net.*;
 
+import javax.imageio.*;
+
+import org.apache.commons.io.*;
 import org.slf4j.*;
+
+import com.sun.image.codec.jpeg.*;
 
 public class ImageTools {
 	private static final Logger log = LoggerFactory.getLogger(ImageTools.class);
@@ -39,7 +45,8 @@ public class ImageTools {
 		return dst;
 	}
 
-	public static int getDifferenceAmount(BufferedImage imageA, BufferedImage imageB, int binarizationThreshold) throws Throwable {
+	public static int getDifferenceAmount(BufferedImage imageA, BufferedImage imageB, int binarizationThreshold)
+			throws Throwable {
 		int length = imageA.getWidth() * imageA.getHeight();
 		int differenceAmount = 0;
 
@@ -59,7 +66,8 @@ public class ImageTools {
 		return differenceAmount;
 	}
 
-	public static int getDifferenceAmount2(BufferedImage imageA, BufferedImage imageB, int binarizationThreshold) throws Throwable {
+	public static int getDifferenceAmount2(BufferedImage imageA, BufferedImage imageB, int binarizationThreshold)
+			throws Throwable {
 		final int height = imageA.getHeight();
 		final int width = imageA.getWidth();
 
@@ -121,7 +129,8 @@ public class ImageTools {
 		return result;
 	}
 
-	public static BufferedImage getImageDifferenceAsImage(BufferedImage imageA, BufferedImage imageB) throws IOException {
+	public static BufferedImage getImageDifferenceAsImage(BufferedImage imageA, BufferedImage imageB)
+			throws IOException {
 		final int height = imageA.getHeight();
 		final int width = imageA.getWidth();
 		int[] diffArray = getImageDifferenceAsArray(imageA, imageB);
@@ -141,6 +150,30 @@ public class ImageTools {
 
 		}
 		return result;
+	}
+
+	public static BufferedImage getBufferedImage(File file) {
+		BufferedImage image = null;
+
+		try {
+			ByteArrayInputStream imageBytes = new ByteArrayInputStream(FileUtils.readFileToByteArray(file));
+			JPEGImageDecoder decoder = JPEGCodec.createJPEGDecoder(imageBytes);
+			image = decoder.decodeAsBufferedImage();
+		} catch (Exception e) {
+			log.error("could not read file");
+		}
+		return image;
+	}
+
+	public static BufferedImage getBufferedImage(URL camera) {
+		BufferedImage image = null;
+		try {
+			image = ImageIO.read(camera);
+		} catch (IOException e) {
+
+		}
+
+		return image;
 	}
 
 }

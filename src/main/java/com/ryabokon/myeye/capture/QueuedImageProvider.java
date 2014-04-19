@@ -1,13 +1,11 @@
 package com.ryabokon.myeye.capture;
 
 import java.awt.image.*;
-import java.io.*;
 import java.net.*;
 import java.util.*;
 
-import javax.imageio.*;
-
 import com.ryabokon.myeye.*;
+import com.ryabokon.myeye.image.*;
 
 public class QueuedImageProvider extends AbstractImageProvider {
 
@@ -15,13 +13,13 @@ public class QueuedImageProvider extends AbstractImageProvider {
 	private final List<BufferedImage> list = Collections.synchronizedList(new LinkedList<BufferedImage>());
 	private Thread fillerThread;
 
-	public QueuedImageProvider(String pathToImagesFolder, URL camera) throws Throwable {
-		super(pathToImagesFolder);
+	public QueuedImageProvider(String pathToStoreImages, URL camera) throws Throwable {
+		super(pathToStoreImages);
 		this.camera = camera;
 	}
 
 	@Override
-	public BufferedImage getImage() throws Throwable {
+	public BufferedImage provideImage() throws Throwable {
 		if (fillerThread == null) {
 			ImageQueueFiller filler = new ImageQueueFiller();
 			fillerThread = new Thread(filler);
@@ -36,7 +34,7 @@ public class QueuedImageProvider extends AbstractImageProvider {
 			Statistics.addConsumerTime(endTime - startTime);
 			return image;
 		}
-		Thread.sleep(3000L);
+		Thread.sleep(1000L);
 		return null;
 	}
 
@@ -46,14 +44,7 @@ public class QueuedImageProvider extends AbstractImageProvider {
 		public void run() {
 			while (true) {
 				long startTime = System.nanoTime();
-				BufferedImage image = null;
-				try {
-					InputStream in = camera.openStream();
-					image = ImageIO.read(in);
-					in.close();
-				} catch (IOException e) {
-
-				}
+				BufferedImage image = ImageTools.getBufferedImage(camera);
 
 				if (image != null) {
 					list.add(image);
