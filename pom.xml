@@ -66,6 +66,11 @@
 			<artifactId>commons-io</artifactId>
 			<version>2.4</version>
 		</dependency>
+		<dependency>
+			<groupId>com.ecyrd.speed4j</groupId>
+			<artifactId>speed4j</artifactId>
+			<version>0.18</version>
+		</dependency>
 	</dependencies>
 	<name>my-eye</name>
 </project>

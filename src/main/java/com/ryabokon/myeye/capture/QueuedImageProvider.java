@@ -48,9 +48,9 @@ public class QueuedImageProvider extends AbstractImageProvider {
 
 				if (image != null) {
 					list.add(image);
-					long endTime = System.nanoTime();
-					Statistics.addProviderTime(endTime - startTime);
 				}
+				long endTime = System.nanoTime();
+				Statistics.addProviderTime(endTime - startTime);
 			}
 
 		}

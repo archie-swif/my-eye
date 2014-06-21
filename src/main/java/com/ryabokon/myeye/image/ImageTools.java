@@ -16,14 +16,14 @@ import com.sun.image.codec.jpeg.*;
 public class ImageTools {
 	private static final Logger log = LoggerFactory.getLogger(ImageTools.class);
 
-	public static BufferedImage scalingResize(BufferedImage src, int dstWidth, int dstHeight) {
-		final int srcHeight = src.getHeight();
-		final int srcWidth = src.getWidth();
+	public static BufferedImage scalingResizeImage(BufferedImage src, int newWidth, int newHeight) {
+		final int oldHeight = src.getHeight();
+		final int oldWidth = src.getWidth();
 
-		double scaleY = (double) dstHeight / srcHeight;
-		double scaleX = (double) dstWidth / srcWidth;
+		double scaleY = (double) newHeight / oldHeight;
+		double scaleX = (double) newWidth / oldWidth;
 
-		BufferedImage dst = new BufferedImage(dstWidth, dstHeight, BufferedImage.TYPE_BYTE_GRAY);
+		BufferedImage dst = new BufferedImage(newWidth, newHeight, BufferedImage.TYPE_BYTE_GRAY);
 		Graphics2D g = dst.createGraphics();
 		AffineTransform at = AffineTransform.getScaleInstance(scaleX, scaleY);
 		g.drawRenderedImage(src, at);
@@ -31,7 +31,7 @@ public class ImageTools {
 		return dst;
 	}
 
-	public static BufferedImage blur(BufferedImage src) {
+	public static BufferedImage blurImage(BufferedImage src) {
 		float[] elements = { .1111f, .1111f, .1111f, .1111f, .1111f, .1111f, .1111f, .1111f, .1111f };
 
 		final int srcHeight = src.getHeight();
@@ -45,6 +45,18 @@ public class ImageTools {
 		return dst;
 	}
 
+	/**
+	 * Calculate diff amount in already blurred images
+	 */
+	/**
+	 * @param imageA
+	 * @param imageB
+	 * @param binarizationThreshold
+	 *            Value: [0..255] If difference in pixels brightness is more than
+	 *            threshold, pixel is marked as different
+	 * @return
+	 * @throws Throwable
+	 */
 	public static int getDifferenceAmount(BufferedImage imageA, BufferedImage imageB, int binarizationThreshold)
 			throws Throwable {
 		int length = imageA.getWidth() * imageA.getHeight();
@@ -66,22 +78,33 @@ public class ImageTools {
 		return differenceAmount;
 	}
 
-	public static int getDifferenceAmount2(BufferedImage imageA, BufferedImage imageB, int binarizationThreshold)
-			throws Throwable {
+	/**
+	 * 1) Convert images to arrays <br>
+	 * 2) Substract arrays and get a substracted image array <br>
+	 * 3) Blur substracted array <br>
+	 * 4) Count diff amount
+	 * 
+	 * This way time consuming blur is applies only once
+	 * 
+	 */
+	public static int getDifferenceAmountWithSingleBlurr(BufferedImage imageA, BufferedImage imageB,
+			int binarizationThreshold) throws Throwable {
 		final int height = imageA.getHeight();
 		final int width = imageA.getWidth();
 
 		int[] diffArray = ImageTools.getImageDifferenceAsArray(imageA, imageB);
 		BoxFilter.filter(diffArray, height, width);
-		return ImageTools.getDifferenceAmount(diffArray, binarizationThreshold);
+		return ImageTools.getDifferenceAmountInSubstractedArray(diffArray, binarizationThreshold);
 	}
 
-	public static int getDifferenceAmount(BufferedImage differenceImage, int binarizationThreshold) throws Throwable {
+	public static int getDifferenceAmountInSubstractedImage(BufferedImage differenceImage, int binarizationThreshold)
+			throws Throwable {
 		int[] pixels = getImageAsArray(differenceImage);
-		return getDifferenceAmount(pixels, binarizationThreshold);
+		return getDifferenceAmountInSubstractedArray(pixels, binarizationThreshold);
 	}
 
-	public static int getDifferenceAmount(int[] differenceArray, int binarizationThreshold) throws Throwable {
+	public static int getDifferenceAmountInSubstractedArray(int[] differenceArray, int binarizationThreshold)
+			throws Throwable {
 		int length = differenceArray.length;
 		int differenceAmount = 0;
 

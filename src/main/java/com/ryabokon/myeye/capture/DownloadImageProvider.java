@@ -12,9 +12,9 @@ import org.slf4j.*;
 import com.ryabokon.myeye.*;
 import com.ryabokon.myeye.image.*;
 
-public class UrlToFileSystemImageProvider extends AbstractImageProvider {
+public class DownloadImageProvider extends AbstractImageProvider {
 
-	private static final Logger log = LoggerFactory.getLogger(UrlToFileSystemImageProvider.class);
+	private static final Logger log = LoggerFactory.getLogger(DownloadImageProvider.class);
 
 	private final String temporaryImageStrage;
 
@@ -22,11 +22,11 @@ public class UrlToFileSystemImageProvider extends AbstractImageProvider {
 	private File[] listOfFiles;
 	private int currentFileId = 0;
 
-	private Thread fillerThread;
+	private Thread downloaderThread;
 
-	public UrlToFileSystemImageProvider(String temporaryImageStrage, String pathToStoreImages, URL camera)
+	public DownloadImageProvider(String temporaryImageStrage, String pathToSaveImages, URL camera)
 			throws Throwable {
-		super(pathToStoreImages);
+		super(pathToSaveImages);
 		this.temporaryImageStrage = temporaryImageStrage;
 		this.camera = camera;
 	}
@@ -34,10 +34,10 @@ public class UrlToFileSystemImageProvider extends AbstractImageProvider {
 	@Override
 	public BufferedImage provideImage() throws Throwable {
 
-		if (fillerThread == null) {
-			FileSystemFiller filler = new FileSystemFiller();
-			fillerThread = new Thread(filler);
-			fillerThread.start();
+		if (downloaderThread == null) {
+			ImageDownloader imageDownloader = new ImageDownloader();
+			downloaderThread = new Thread(imageDownloader);
+			downloaderThread.start();
 		}
 
 		long startTime = System.nanoTime();
@@ -73,7 +73,7 @@ public class UrlToFileSystemImageProvider extends AbstractImageProvider {
 		return listOfFiles;
 	}
 
-	private class FileSystemFiller implements Runnable {
+	private class ImageDownloader implements Runnable {
 
 		@Override
 		public void run() {

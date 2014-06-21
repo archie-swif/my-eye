@@ -16,8 +16,7 @@ public class BlurTest
 	URL imageFile = ImageToolsTest.class.getClassLoader().getResource("1.jpg");
 	BufferedImage image = ImageIO.read(imageFile);
 
-	ImageTools.blur(image);
-	// BufferedImage blurd = ImageTools.blur(image);
+	BufferedImage blurd = ImageTools.blurImage(image);
 	// ImageIO.write(blurd, "JPG", new File("blurd_z.jpg"));
 
     }

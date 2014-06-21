@@ -55,8 +55,8 @@ public class DifferenceFinder {
 	}
 
 	private BufferedImage prepareImage(BufferedImage image) {
-		image = ImageTools.scalingResize(image, 320, 256);
-		image = ImageTools.blur(image);
+		image = ImageTools.scalingResizeImage(image, 160, 128);
+		image = ImageTools.blurImage(image);
 		return image;
 	}
 

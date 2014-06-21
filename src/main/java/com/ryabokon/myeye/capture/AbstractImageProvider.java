@@ -16,10 +16,10 @@ public abstract class AbstractImageProvider {
 	protected final SimpleDateFormat fileDateFormatter = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss-SSSS");
 	protected final SimpleDateFormat folderDateFormatter = new SimpleDateFormat("yyyy.MM.dd");
 
-	private final String pathToStoreImages;
+	private final String pathToSaveImages;
 
 	public AbstractImageProvider(String pathToStoreImages) {
-		this.pathToStoreImages = pathToStoreImages;
+		this.pathToSaveImages = pathToStoreImages;
 	}
 
 	public abstract BufferedImage provideImage() throws Throwable;
@@ -28,7 +28,7 @@ public abstract class AbstractImageProvider {
 
 		Date date = new Date();
 
-		String dateFolder = pathToStoreImages + folderDateFormatter.format(date) + "/";
+		String dateFolder = pathToSaveImages + folderDateFormatter.format(date) + "/";
 		File dateFolderFile = new File(dateFolder);
 		if (!dateFolderFile.exists()) {
 			dateFolderFile.mkdirs();
@@ -36,7 +36,8 @@ public abstract class AbstractImageProvider {
 
 		String targetPath = dateFolder + fileDateFormatter.format(date) + ".jpg";
 		File targetFile = new File(targetPath);
-		ImageIO.write(rotateImage(image), "JPG", targetFile);
+		//ImageIO.write(rotateImage(image), "JPG", targetFile);
+		ImageIO.write(image, "JPG", targetFile);
 	}
 
 	private BufferedImage rotateImage(BufferedImage sourceImage) throws IOException {
