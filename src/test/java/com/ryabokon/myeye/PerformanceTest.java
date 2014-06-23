@@ -1,20 +1,15 @@
 package com.ryabokon.myeye;
 
-import static org.junit.Assert.*;
+import java.awt.image.*;
+import java.io.*;
+import java.net.*;
+import java.text.*;
 
-import java.awt.image.BufferedImage;
-import java.awt.image.Raster;
-import java.io.File;
-import java.net.URL;
-import java.text.SimpleDateFormat;
+import javax.imageio.*;
 
-import javax.imageio.ImageIO;
+import org.junit.*;
 
-import org.junit.Ignore;
-import org.junit.Test;
-
-import com.ryabokon.myeye.image.BoxFilter;
-import com.ryabokon.myeye.image.ImageTools;
+import com.ryabokon.myeye.image.*;
 
 @Ignore
 public class PerformanceTest {
@@ -24,18 +19,19 @@ public class PerformanceTest {
 		URL imageFile = ImageToolsTest.class.getClassLoader().getResource("1.jpg");
 		BufferedImage image = ImageIO.read(imageFile);
 
-		for (int i = 0; i < 10000; i++) {
+		for (int i = 0; i < 100000; i++) {
 			BufferedImage sized = ImageTools.scalingResizeImage(image, 256, 320);
 		}
 
 	}
-	
+
 	@Test
-	public void arrayedResizePerformanceTest() throws Throwable {
+	public void arrayResizePerformanceTest() throws Throwable {
 		URL imageFile = ImageToolsTest.class.getClassLoader().getResource("1.jpg");
 		Raster raster = ImageTools.getRaster(new File(imageFile.toURI()));
 
-		for (int i = 0; i < 10000; i++) {				
+		for (int i = 0; i < 100000; i++) {
+
 			int[] result = ImageTools.getRasterAsScaledArray(raster, 4);
 		}
 

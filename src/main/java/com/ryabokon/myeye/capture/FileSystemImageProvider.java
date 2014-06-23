@@ -3,7 +3,7 @@ package com.ryabokon.myeye.capture;
 import java.awt.image.*;
 import java.io.*;
 import java.nio.file.*;
-import java.util.Arrays;
+import java.util.*;
 
 import org.slf4j.*;
 
@@ -25,7 +25,7 @@ public class FileSystemImageProvider extends AbstractImageProvider {
 	}
 
 	@Override
-	public BufferedImage provideImage() throws Throwable {
+	public Raster provideImage() throws Throwable {
 
 		long startTime = System.nanoTime();
 		// Refill files list
@@ -44,14 +44,14 @@ public class FileSystemImageProvider extends AbstractImageProvider {
 		}
 
 		File file = listOfFiles[currentFileId];
-		BufferedImage image = ImageTools.getBufferedImage(file);
+		Raster raster = ImageTools.getRaster(file);
 		Files.deleteIfExists(file.toPath());
 
 		currentFileId++;
 
 		long endTime = System.nanoTime();
 		Statistics.addConsumerTime(endTime - startTime);
-		return image;
+		return raster;
 	}
 
 	private File[] getImageFilesInFolder(String path) {

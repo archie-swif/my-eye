@@ -1,6 +1,5 @@
 package com.ryabokon.myeye.capture;
 
-import java.awt.*;
 import java.awt.image.*;
 import java.io.*;
 import java.text.*;
@@ -9,6 +8,8 @@ import java.util.*;
 import javax.imageio.*;
 
 import org.slf4j.*;
+
+import com.ryabokon.myeye.image.*;
 
 public abstract class AbstractImageProvider {
 
@@ -22,9 +23,9 @@ public abstract class AbstractImageProvider {
 		this.pathToSaveImages = pathToStoreImages;
 	}
 
-	public abstract BufferedImage provideImage() throws Throwable;
+	public abstract Raster provideImage() throws Throwable;
 
-	public void saveImage(BufferedImage image) throws Throwable {
+	public void saveImage(Raster raster) throws Throwable {
 
 		Date date = new Date();
 
@@ -36,18 +37,10 @@ public abstract class AbstractImageProvider {
 
 		String targetPath = dateFolder + fileDateFormatter.format(date) + ".jpg";
 		File targetFile = new File(targetPath);
-		// ImageIO.write(rotateImage(image), "JPG", targetFile);
-		ImageIO.write(image, "JPG", targetFile);
-	}
 
-	private BufferedImage rotateImage(BufferedImage sourceImage) throws IOException {
-		BufferedImage rotatedImage = new BufferedImage(sourceImage.getHeight(), sourceImage.getWidth(),
-				sourceImage.getType());
-		Graphics2D graphics = (Graphics2D) rotatedImage.getGraphics();
-		graphics.rotate(Math.toRadians(90.0));
-		graphics.drawImage(sourceImage, 0, -rotatedImage.getWidth(null), null);
-		graphics.dispose();
-		return rotatedImage;
+		//TODO too complex
+		BufferedImage buffImage = ImageTools.writeImageArrayToBufferedImage(raster.getHeight(), raster.getWidth(), ImageTools.getRasterAsArray(raster));
+		ImageIO.write(buffImage, "JPG", targetFile);
 	}
 
 }

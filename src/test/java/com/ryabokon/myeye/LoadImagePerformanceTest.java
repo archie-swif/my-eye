@@ -1,38 +1,20 @@
 package com.ryabokon.myeye;
 
-import static org.junit.Assert.*;
+import java.awt.*;
+import java.awt.image.*;
+import java.io.*;
+import java.net.*;
+import java.nio.file.*;
 
-import java.awt.Image;
-import java.awt.Toolkit;
-import java.awt.image.BufferedImage;
-import java.awt.image.Raster;
-import java.io.BufferedInputStream;
-import java.io.ByteArrayInputStream;
-import java.io.DataInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
-import java.net.URI;
-import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import javax.imageio.*;
+import javax.swing.*;
 
-import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
+import org.apache.commons.io.*;
+import org.junit.*;
+import org.junit.rules.*;
 
-import org.apache.commons.io.FileUtils;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Ignore;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TestName;
-
-import com.ecyrd.speed4j.StopWatch;
-import com.sun.image.codec.jpeg.JPEGCodec;
-import com.sun.image.codec.jpeg.JPEGDecodeParam;
-import com.sun.image.codec.jpeg.JPEGImageDecoder;
+import com.ecyrd.speed4j.*;
+import com.sun.image.codec.jpeg.*;
 
 @Ignore
 public class LoadImagePerformanceTest {
@@ -101,7 +83,7 @@ public class LoadImagePerformanceTest {
 			BufferedImage image = decoder.decodeAsBufferedImage();
 		}
 	}
-	
+
 	@Test
 	public void decoderRasterTest() throws Throwable {
 		URL imageUrl = ImageToolsTest.class.getClassLoader().getResource("pie.jpg");
@@ -113,14 +95,14 @@ public class LoadImagePerformanceTest {
 			Raster image = decoder.decodeAsRaster();
 		}
 	}
-	
+
 	@Test
 	@Ignore
 	public void decoderTypeTest() throws Throwable {
 		InputStream is = new FileInputStream("src/test/resources/pie.jpg");
 
-		for (int i = 0; i < ITERATIONS; i++) {			
-			JPEGImageDecoder decoder = JPEGCodec.createJPEGDecoder(is);			
+		for (int i = 0; i < ITERATIONS; i++) {
+			JPEGImageDecoder decoder = JPEGCodec.createJPEGDecoder(is);
 			BufferedImage image = decoder.decodeAsBufferedImage();
 		}
 	}
@@ -139,6 +121,44 @@ public class LoadImagePerformanceTest {
 			BufferedImage buffered = new BufferedImage(1280, 1024, BufferedImage.TYPE_INT_ARGB);
 			buffered.getGraphics().drawImage(tmp, 0, 0, null);
 		}
+	}
+
+	@Test
+	public void openAndCloseStreamTest() throws Throwable {
+		URL camera = new URL("http", "192.168.2.107", 80, "/image.jpg");
+
+		for (int i = 0; i < 100; i++) {
+			InputStream in = camera.openStream();
+			BufferedImage image = ImageIO.read(in);
+			Assert.assertTrue(image.getHeight() == 1024);
+			in.close();
+		}
+
+	}
+
+	@Test
+	public void dontOpenStraemTest() throws Throwable {
+		URL camera = new URL("http", "192.168.2.107", 80, "/image.jpg");
+
+		for (int i = 0; i < 100; i++) {
+			BufferedImage image = ImageIO.read(camera);
+			Assert.assertTrue(image.getHeight() == 1024);
+		}
+
+	}
+
+	@Test
+	public void decoderAndURLTest() throws Throwable {
+		URL camera = new URL("http", "192.168.2.107", 80, "/image.jpg");
+
+		for (int i = 0; i < 100; i++) {
+			InputStream in = camera.openStream();
+			JPEGImageDecoder decoder = JPEGCodec.createJPEGDecoder(in);
+			BufferedImage image = decoder.decodeAsBufferedImage();
+			Assert.assertTrue(image.getHeight() == 1024);
+			in.close();
+		}
+
 	}
 
 }

@@ -65,16 +65,22 @@ public class ImageTools {
 		int[] pixelsA = getImageAsArray(imageA);
 		int[] pixelsB = getImageAsArray(imageB);
 
-		for (int i = 0; i < length; i++) {
-			int colorA = pixelsA[i];
-			int colorB = pixelsB[i];
+		differenceAmount = getDifferenceAmount(pixelsA, pixelsB, binarizationThreshold);
+		return differenceAmount;
+	}
+
+	public static int getDifferenceAmount(int[] imageA, int[] imageB, int binarizationThreshold) throws Throwable {
+		int differenceAmount = 0;
+
+		for (int i = 0; i < imageA.length; i++) {
+			int colorA = imageA[i];
+			int colorB = imageB[i];
 
 			int diffColor = Math.abs(colorB - colorA);
 			if (diffColor > binarizationThreshold) {
 				differenceAmount++;
 			}
 		}
-
 		return differenceAmount;
 	}
 
@@ -139,7 +145,7 @@ public class ImageTools {
 	public static int[] getRasterAsScaledArray(Raster raster, int scale) {
 		final int height = raster.getHeight();
 		final int width = raster.getWidth();
-		int[] result = new int[height * width/(scale*scale)];
+		int[] result = new int[height * width / (scale * scale)];
 		final byte[] pixels = ((DataBufferByte) raster.getDataBuffer()).getData();
 
 		int i = 0;

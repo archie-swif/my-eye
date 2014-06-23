@@ -12,8 +12,8 @@ public class DifferenceFinder {
 	private static final Logger log = LoggerFactory.getLogger(DifferenceFinder.class);
 
 	private final AbstractImageProvider imageProvider;
-	private BufferedImage previousImage;
-	private BufferedImage currentImage;
+	private int[] previousImage;
+	private int[] currentImage;
 
 	public DifferenceFinder(AbstractImageProvider imageProvider) throws Throwable {
 		this.imageProvider = imageProvider;
@@ -22,20 +22,19 @@ public class DifferenceFinder {
 	public void startCapture() throws IOException, Throwable {
 		while (true) {
 
-			BufferedImage image = imageProvider.provideImage();
+			Raster raster = imageProvider.provideImage();
 
-			if (image != null) {
+			if (raster != null) {
 				long startTime = System.nanoTime();
-				if (previousImage == null) {
-					this.previousImage = prepareImage(image);
-				}
 
-				else {
-					currentImage = prepareImage(image);
+				if (previousImage == null) {
+					this.previousImage = prepareImage(raster);
+				} else {
+					currentImage = prepareImage(raster);
 
 					int diffAmmount = ImageTools.getDifferenceAmount(previousImage, currentImage, 15);
 					if (diffAmmount > 200) {
-						imageProvider.saveImage(image);
+						imageProvider.saveImage(raster);
 					}
 					previousImage = currentImage;
 
@@ -53,9 +52,9 @@ public class DifferenceFinder {
 
 	}
 
-	private BufferedImage prepareImage(BufferedImage image) {
-		image = ImageTools.scalingResizeImage(image, 160, 128);
-		image = ImageTools.blurImage(image);
+	private int[] prepareImage(Raster raster) {
+		int[] image = ImageTools.getRasterAsScaledArray(raster, 4);
+		image = BoxFilter.filter(image, raster.getWidth() / 4, raster.getHeight() / 4);
 		return image;
 	}
 
