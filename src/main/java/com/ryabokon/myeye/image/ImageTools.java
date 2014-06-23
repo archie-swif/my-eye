@@ -240,4 +240,18 @@ public class ImageTools {
 		return image;
 	}
 
+	public static Raster getRaster(URL camera) {
+		Raster raster = null;
+		try {
+			InputStream in = camera.openStream();
+			JPEGImageDecoder decoder = JPEGCodec.createJPEGDecoder(in);
+			raster = decoder.decodeAsRaster();
+			in.close();
+		} catch (IOException e) {
+
+		}
+
+		return raster;
+	}
+
 }
