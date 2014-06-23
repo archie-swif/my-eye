@@ -3,6 +3,7 @@ package com.ryabokon.myeye;
 import static org.junit.Assert.*;
 
 import java.awt.image.BufferedImage;
+import java.awt.image.Raster;
 import java.io.File;
 import java.net.URL;
 import java.text.SimpleDateFormat;
@@ -25,6 +26,17 @@ public class PerformanceTest {
 
 		for (int i = 0; i < 10000; i++) {
 			BufferedImage sized = ImageTools.scalingResizeImage(image, 256, 320);
+		}
+
+	}
+	
+	@Test
+	public void arrayedResizePerformanceTest() throws Throwable {
+		URL imageFile = ImageToolsTest.class.getClassLoader().getResource("1.jpg");
+		Raster raster = ImageTools.getRaster(new File(imageFile.toURI()));
+
+		for (int i = 0; i < 10000; i++) {				
+			int[] result = ImageTools.getRasterAsScaledArray(raster, 4);
 		}
 
 	}

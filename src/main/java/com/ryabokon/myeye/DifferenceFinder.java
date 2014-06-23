@@ -12,7 +12,6 @@ public class DifferenceFinder {
 	private static final Logger log = LoggerFactory.getLogger(DifferenceFinder.class);
 
 	private final AbstractImageProvider imageProvider;
-
 	private BufferedImage previousImage;
 	private BufferedImage currentImage;
 
@@ -41,7 +40,7 @@ public class DifferenceFinder {
 					previousImage = currentImage;
 
 					long endTime = System.nanoTime();
-					Statistics.addDetectorTime(endTime - startTime, String.valueOf(diffAmmount));
+					Statistics.addDetectorTime(endTime - startTime);
 				}
 
 			}

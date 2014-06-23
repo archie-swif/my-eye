@@ -1,6 +1,7 @@
 package com.ryabokon.myeye;
 
 import java.awt.image.*;
+import java.io.File;
 import java.net.*;
 import java.text.*;
 
@@ -91,6 +92,19 @@ public class ImageToolsTest {
 		// BufferedImage blurd =
 		// ImageTools.writeImageArrayToBufferedImage(height, width, img);
 		// ImageIO.write(blurd, "JPG", new File("blurd_4.jpg"));
+
+	}
+
+	@Test
+	public void rasterScaleTest() throws Throwable {
+		URL imageFile = ImageToolsTest.class.getClassLoader().getResource("1.jpg");
+		Raster raster = ImageTools.getRaster(new File(imageFile.toURI()));
+		final int height = raster.getHeight();
+		final int width = raster.getWidth();		
+
+		int[] result = ImageTools.getRasterAsScaledArray(raster, 4);
+		//BufferedImage scaledRaster = ImageTools.writeImageArrayToBufferedImage(height/4 , width/4, result);
+		//ImageIO.write(scaledRaster, "JPG", new File("scale_raster.jpg"));
 
 	}
 

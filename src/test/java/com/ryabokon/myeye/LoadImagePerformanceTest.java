@@ -35,7 +35,7 @@ import com.sun.image.codec.jpeg.JPEGDecodeParam;
 import com.sun.image.codec.jpeg.JPEGImageDecoder;
 
 @Ignore
-public class ImageLoadPerformanceTest {
+public class LoadImagePerformanceTest {
 
 	private static final int ITERATIONS = 100;
 	public StopWatch sw = new StopWatch();
@@ -117,7 +117,7 @@ public class ImageLoadPerformanceTest {
 	@Test
 	@Ignore
 	public void decoderTypeTest() throws Throwable {
-		InputStream is = new FileInputStream("D:/Language/GIT/my-eye/src/test/resources/pie.jpg");
+		InputStream is = new FileInputStream("src/test/resources/pie.jpg");
 
 		for (int i = 0; i < ITERATIONS; i++) {			
 			JPEGImageDecoder decoder = JPEGCodec.createJPEGDecoder(is);			

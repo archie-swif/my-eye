@@ -11,17 +11,17 @@ public class Statistics {
 	private static int c = 0;
 	private static int d = 0;
 
-	public static void addProviderTime(long delta, String... info) {
+	public static void addProviderTime(long delta) {
 		imageProviderTime = getNewAvarageTime(delta, imageProviderTime, p);
 		p++;
 	}
 
-	public static void addConsumerTime(long delta, String... info) {
+	public static void addConsumerTime(long delta) {
 		imageConsumerTime = getNewAvarageTime(delta, imageConsumerTime, c);
 		c++;
 	}
 
-	public static void addDetectorTime(long delta, String... info) {
+	public static void addDetectorTime(long delta) {
 		imageDetectorTime = getNewAvarageTime(delta, imageDetectorTime, d);
 		d++;
 	}
@@ -45,7 +45,7 @@ public class Statistics {
 		log.info(sb.toString());
 	}
 
-	public static void printImageProcessingTime(long startTime, long endTime, String... otherImprotatntInfo) {
+	public static void printProcessingTime(long startTime, long endTime, String... otherImprotatntInfo) {
 
 		long delta = endTime - startTime;
 		StringBuffer sb = new StringBuffer();

@@ -36,7 +36,7 @@ public abstract class AbstractImageProvider {
 
 		String targetPath = dateFolder + fileDateFormatter.format(date) + ".jpg";
 		File targetFile = new File(targetPath);
-		//ImageIO.write(rotateImage(image), "JPG", targetFile);
+		// ImageIO.write(rotateImage(image), "JPG", targetFile);
 		ImageIO.write(image, "JPG", targetFile);
 	}
 

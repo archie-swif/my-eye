@@ -52,8 +52,8 @@ public class ImageTools {
 	 * @param imageA
 	 * @param imageB
 	 * @param binarizationThreshold
-	 *            Value: [0..255] If difference in pixels brightness is more than
-	 *            threshold, pixel is marked as different
+	 *            Value: [0..255] If difference in pixels brightness is more
+	 *            than threshold, pixel is marked as different
 	 * @return
 	 * @throws Throwable
 	 */
@@ -119,16 +119,37 @@ public class ImageTools {
 	}
 
 	public static int[] getImageAsArray(BufferedImage image) {
-		final int height = image.getHeight();
-		final int width = image.getWidth();
-		int[] result = new int[height * width];
+		return getRasterAsArray(image.getRaster());
+	}
 
-		final byte[] pixels = ((DataBufferByte) image.getRaster().getDataBuffer()).getData();
+	public static int[] getRasterAsArray(Raster raster) {
+		final int height = raster.getHeight();
+		final int width = raster.getWidth();
+		int[] result = new int[height * width];
+		final byte[] pixels = ((DataBufferByte) raster.getDataBuffer()).getData();
 
 		final int pixelLength = 3;
 		for (int pixel = 0, i = 0; pixel < pixels.length; pixel += pixelLength, i++) {
 			int blue = pixels[pixel] & 0xff;
 			result[i] = blue;
+		}
+		return result;
+	}
+
+	public static int[] getRasterAsScaledArray(Raster raster, int scale) {
+		final int height = raster.getHeight();
+		final int width = raster.getWidth();
+		int[] result = new int[height * width/(scale*scale)];
+		final byte[] pixels = ((DataBufferByte) raster.getDataBuffer()).getData();
+
+		int i = 0;
+		for (int y = 0; y < height; y = y + scale) {
+			for (int x = 0; x < width; x = x + scale) {
+				int pixel = (x + (y * width)) * 3;
+				int blue = pixels[pixel] & 0xff;
+				result[i] = blue;
+				i++;
+			}
 		}
 		return result;
 	}
@@ -163,11 +184,11 @@ public class ImageTools {
 		return result;
 	}
 
-	public static BufferedImage writeImageArrayToBufferedImage(final int height, final int width, int[] diffArray) {
+	public static BufferedImage writeImageArrayToBufferedImage(final int height, final int width, int[] imageArray) {
 		BufferedImage result = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
 		for (int y = 0; y < height; y++) {
 			for (int x = 0; x < width; x++) {
-				int diffColor = diffArray[(y * width + x)];
+				int diffColor = imageArray[(y * width + x)];
 				result.setRGB(x, y, new Color(diffColor, diffColor, diffColor).getRGB());
 			}
 
@@ -186,6 +207,20 @@ public class ImageTools {
 			log.error("could not read file");
 		}
 		return image;
+	}
+
+	public static Raster getRaster(File file) {
+		Raster raster = null;
+
+		try {
+			ByteArrayInputStream imageBytes = new ByteArrayInputStream(FileUtils.readFileToByteArray(file));
+			JPEGImageDecoder decoder = JPEGCodec.createJPEGDecoder(imageBytes);
+			raster = decoder.decodeAsRaster();
+
+		} catch (Exception e) {
+			log.error("could not read file");
+		}
+		return raster;
 	}
 
 	public static BufferedImage getBufferedImage(URL camera) {
