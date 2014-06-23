@@ -3,6 +3,7 @@ package com.ryabokon.myeye.capture;
 import java.awt.image.*;
 import java.io.*;
 import java.nio.file.*;
+import java.util.Arrays;
 
 import org.slf4j.*;
 
@@ -16,8 +17,6 @@ public class FileSystemImageProvider extends AbstractImageProvider {
 	private final String sourceImageFolder;
 
 	private File[] listOfFiles;
-	// This counter goes from array size to 0.
-	// Because files in array are sorted backwards by date-filenane
 	private int currentFileId = 0;
 
 	public FileSystemImageProvider(String sourceImageFolder, String pathToImagesFolder) throws Throwable {
@@ -30,22 +29,25 @@ public class FileSystemImageProvider extends AbstractImageProvider {
 
 		long startTime = System.nanoTime();
 		// Refill files list
-		if (listOfFiles == null || listOfFiles.length < 2 || currentFileId == -1) {
-			// long sleepTime = System.nanoTime();
-			// Thread.sleep(1L);
-			// startTime = sleepTime;
+		if (listOfFiles == null || listOfFiles.length < 2 || currentFileId == listOfFiles.length) {
+
+			if (listOfFiles == null || listOfFiles.length < 2) {
+				long sleepTime = System.nanoTime();
+				Thread.sleep(1000L);
+				startTime = sleepTime;
+			}
 			listOfFiles = getImageFilesInFolder(sourceImageFolder);
-			currentFileId = listOfFiles.length - 1;
 			if (listOfFiles == null || listOfFiles.length < 2) {
 				return null;
 			}
+			currentFileId = 0;
 		}
 
 		File file = listOfFiles[currentFileId];
 		BufferedImage image = ImageTools.getBufferedImage(file);
 		Files.deleteIfExists(file.toPath());
 
-		currentFileId--;
+		currentFileId++;
 
 		long endTime = System.nanoTime();
 		Statistics.addConsumerTime(endTime - startTime);
@@ -60,6 +62,7 @@ public class FileSystemImageProvider extends AbstractImageProvider {
 				return name.endsWith(".jpg");
 			}
 		});
+		Arrays.sort(listOfFiles);
 		return listOfFiles;
 	}
 
