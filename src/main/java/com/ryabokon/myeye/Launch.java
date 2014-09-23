@@ -13,7 +13,7 @@ public class Launch {
 		//TODO Switch to using Raster instead of BufferedImage
 		//TODO Try Jython\Commons Exec to grab images from python script output on RaspberryPi?
 				
-		URL camera = new URL("http", "192.168.2.107", 80, "/image.jpg");
+		//URL camera = new URL("http", "192.168.2.107", 80, "/image.jpg");
 		String path = "images/";
 		AbstractImageProvider provider;
 
@@ -26,10 +26,11 @@ public class Launch {
 		// }
 
 		// provider = new SingleImageProvider(path,camera);
-		//provider = new FileSystemImageProvider(path, path + "diff/");
-		provider = new QueuedImageProvider(path, camera);
+		// provider = new FileSystemImageProvider(path, path + "diff/");
+		// provider = new QueuedImageProvider(path, camera);
 		// provider = new CommandLineImageProvider(path, command);
 		// provider = new DownloadImageProvider(path, path + "diff/", camera);
+	    provider = new WebcamImageProvider(path);
 
 		DifferenceFinder eye = new DifferenceFinder(provider);
 		eye.startCapture();

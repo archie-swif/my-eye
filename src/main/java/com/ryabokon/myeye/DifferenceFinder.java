@@ -46,9 +46,10 @@ public class DifferenceFinder {
 			}
 
 			else {
-				Statistics.printStatistics();
+
 			}
 
+			Statistics.printStatistics();
 		}
 
 	}
