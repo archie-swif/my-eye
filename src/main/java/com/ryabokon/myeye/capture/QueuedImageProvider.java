@@ -1,11 +1,15 @@
 package com.ryabokon.myeye.capture;
 
-import java.awt.image.*;
-import java.net.*;
-import java.util.*;
+import java.awt.image.BufferedImage;
+import java.net.URL;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
 
-import com.ryabokon.myeye.*;
-import com.ryabokon.myeye.image.*;
+import javax.imageio.ImageIO;
+
+import com.ryabokon.myeye.Statistics;
+import com.ryabokon.myeye.image.ImageTools;
 
 public class QueuedImageProvider extends AbstractImageProvider {
 
@@ -40,6 +44,10 @@ public class QueuedImageProvider extends AbstractImageProvider {
 
 	private class ImageQueueFiller implements Runnable {
 
+		public ImageQueueFiller() {
+			ImageIO.setUseCache(false);
+		}
+
 		@Override
 		public void run() {
 			while (true) {
@@ -48,6 +56,12 @@ public class QueuedImageProvider extends AbstractImageProvider {
 
 				if (image != null) {
 					list.add(image);
+				} else {
+					try {
+						Thread.sleep(1000);
+					} catch (InterruptedException e) {
+
+					}
 				}
 				long endTime = System.nanoTime();
 				Statistics.addProviderTime(endTime - startTime);

@@ -1,12 +1,13 @@
 package com.ryabokon.myeye;
 
-import java.awt.image.*;
-import java.io.*;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 
-import org.slf4j.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import com.ryabokon.myeye.capture.*;
-import com.ryabokon.myeye.image.*;
+import com.ryabokon.myeye.capture.AbstractImageProvider;
+import com.ryabokon.myeye.image.ImageTools;
 
 public class DifferenceFinder {
 	private static final Logger log = LoggerFactory.getLogger(DifferenceFinder.class);
@@ -46,10 +47,10 @@ public class DifferenceFinder {
 			}
 
 			else {
+				Statistics.printStatistics();
 
 			}
 
-			Statistics.printStatistics();
 		}
 
 	}

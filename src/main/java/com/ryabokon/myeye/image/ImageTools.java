@@ -1,17 +1,34 @@
 package com.ryabokon.myeye.image;
 
-import java.awt.*;
-import java.awt.geom.*;
-import java.awt.image.*;
-import java.io.*;
-import java.net.*;
+import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.geom.AffineTransform;
+import java.awt.image.BufferedImage;
+import java.awt.image.ConvolveOp;
+import java.awt.image.DataBufferByte;
+import java.awt.image.Kernel;
+import java.awt.image.Raster;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URISyntaxException;
+import java.net.URL;
 
-import javax.imageio.*;
+import javax.imageio.ImageIO;
 
-import org.apache.commons.io.*;
-import org.slf4j.*;
+import org.apache.commons.io.FileUtils;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.util.EntityUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import com.sun.image.codec.jpeg.*;
+import com.ryabokon.myeye.capture.HttpClientFactory;
+import com.sun.image.codec.jpeg.JPEGCodec;
+import com.sun.image.codec.jpeg.JPEGImageDecoder;
 
 public class ImageTools {
 	private static final Logger log = LoggerFactory.getLogger(ImageTools.class);
@@ -139,7 +156,7 @@ public class ImageTools {
 	public static int[] getRasterAsScaledArray(Raster raster, int scale) {
 		final int height = raster.getHeight();
 		final int width = raster.getWidth();
-		int[] result = new int[height * width/(scale*scale)];
+		int[] result = new int[height * width / (scale * scale)];
 		final byte[] pixels = ((DataBufferByte) raster.getDataBuffer()).getData();
 
 		int i = 0;
@@ -225,13 +242,26 @@ public class ImageTools {
 
 	public static BufferedImage getBufferedImage(URL camera) {
 		BufferedImage image = null;
+		HttpEntity entity = null;
 		try {
-			image = ImageIO.read(camera);
-		} catch (IOException e) {
+
+			HttpClient httpClient = HttpClientFactory.getHttpClient();
+			HttpGet httpget = new HttpGet(camera.toURI());
+			HttpResponse response = httpClient.execute(httpget);
+			entity = response.getEntity();
+			if (entity != null) {
+				InputStream inputStream = entity.getContent();
+				image = ImageIO.read(inputStream);
+			}
+		} catch (IOException | URISyntaxException e) {
+			log.error("Get image error", e);
+		} finally {
+			if (entity != null) {
+				EntityUtils.consumeQuietly(entity);
+			}
 
 		}
 
 		return image;
 	}
-
 }
