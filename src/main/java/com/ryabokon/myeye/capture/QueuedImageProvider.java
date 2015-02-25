@@ -8,27 +8,29 @@ import java.util.List;
 
 import javax.imageio.ImageIO;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.ryabokon.myeye.Statistics;
 import com.ryabokon.myeye.image.ImageTools;
 
 public class QueuedImageProvider extends AbstractImageProvider {
 
+	private static final Logger log = LoggerFactory.getLogger(QueuedImageProvider.class);
+
 	private final URL camera;
 	private final List<BufferedImage> list = Collections.synchronizedList(new LinkedList<BufferedImage>());
-	private Thread fillerThread;
 
 	public QueuedImageProvider(String pathToStoreImages, URL camera) throws Throwable {
 		super(pathToStoreImages);
 		this.camera = camera;
+
+		ImageQueueFiller filler = new ImageQueueFiller();
+		new Thread(filler).start();
 	}
 
 	@Override
 	public BufferedImage provideImage() throws Throwable {
-		if (fillerThread == null) {
-			ImageQueueFiller filler = new ImageQueueFiller();
-			fillerThread = new Thread(filler);
-			fillerThread.start();
-		}
 
 		long startTime = System.nanoTime();
 		if (list.size() != 0) {
