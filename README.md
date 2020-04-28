@@ -15,6 +15,6 @@ Then, it's a "diff image", when you subtract two subsequent images, pixel by pix
 
 Bot how much "motion" is this? We can sum brightness of all pixels and get a value. It works too well, now you can detect changes in shadows and lighting, even when someone walks outside of the image.
 
-To make it less sensitive, we can apply binarization. If pixel brightness is bigger then threshold, make it's brightness 255. Otherwise, make it 0. You can see how binarization with different levels of threshold looks like, and which values works better.
+To make it less sensitive, we can apply binarization. If pixel brightness is bigger then threshold, make it's brightness 255. Otherwise, make it 0. You can see how binarization with different levels of threshold looks like, and which values work better.
 
 Finally, a diff image with binarization, we filtered out some noise, and "motion" is more visible. So you (and your fellow ai) can tell for sure that dog is moving!
